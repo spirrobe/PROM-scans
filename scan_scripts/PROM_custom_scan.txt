@@ -112,7 +112,7 @@ pl print "Doing /mom/latest/",$my{pdmfilename_trunk}, "\n"
 #total move time: 40 + 40 + 40 s
 #total time: 132 s --> 2 min, 45.5 s
 ###################
-sh get_rx_client nave=100 scantype=.rhistep                              # start pdm file recording
+#sh get_rx_client nave=100 scantype=.rhistep                              # start pdm file recording
 ##sh get_processing executed_by_cron=1                    # start pdm file processing (create dmp, zspc, mmclx files)
 #pl $my{pdmfilename_trunk} = $val[0]
 #pl chomp $my{pdmfilename_trunk}
