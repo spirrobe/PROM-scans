@@ -17,7 +17,9 @@ pl $my{elv_start} = 30
 pl $my{elvspeed} = 0.5
 pl $my{elvreturnspeed} = 5
 
+
 pl $my{elv_ppi} = 85
+pl $my{azi_return} = 85
 pl $my{azispeed} = 4
 
 pl $my{elv_zenith} = 90.0
@@ -203,6 +205,7 @@ pl print "Doing /mom/latest/",$my{pdmfilename_trunk}, "\n"
 #total time: 20.5 s
 ###################
 aero moveabs y `$my{elv_zenith}` yf `$my{elvreturnspeed}`
+aero moveabs x `$my{azi_return}` xf `$my{elvreturnspeed}`
 aero wait MOVEDONE y
 pl select(undef, undef, undef, 0.5)
 
