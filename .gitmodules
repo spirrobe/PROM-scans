@@ -1,3 +1,0 @@
-[submodule "posdisp"]
-	path = posdisp
-	url = proto@192.168.1.17:repositories/posdispatcher/posdisp.git
