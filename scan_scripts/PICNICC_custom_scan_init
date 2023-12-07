@@ -1,0 +1,26 @@
+#!/bin/csh
+cd $HOME
+set path = ( /bin /usr/bin /home/data/metek/m36s/bin )
+
+if (  "`check_aerotech`" == "OK" ) then
+    echo
+    killall aerotechcmd
+    sleep 1
+
+    echo starting aerotechcmd at `date`
+    aerotechcmd  /home/data/metek/m36s/srv_scripts/CyCARE_rhi_ppi
+    #echo finished aerotechcmd at `date`
+    #sleep 2  #  wait until vertical mode is finished
+    #get_rhi_processing
+else
+    echo
+    echo script was not executed because the aerotechdrives seem to be not ready `date`
+    echo ls /tmp/aerotech_is_in_use
+    ls /tmp/aerotech_is_in_use
+    echo ps xa grep netcat
+    ps xa | grep '[n]etcat aerotech 8000'
+    echo ca
+    ca
+    echo check_nc2aerotech
+    check_nc2aerotech
+endif

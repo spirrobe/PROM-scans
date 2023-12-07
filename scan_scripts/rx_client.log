@@ -1,0 +1,80 @@
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+Logging system created!	<Global_Init>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+Socket created!	<TCP Rx-SOCK>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+Socket is blocking!	<TCP Rx-SOCK>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+XCRL_AVR module created!	<PRC_BUF::PRC_BUF>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+Thread created!	<PRC-THRD>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+Processing module created!	<Global_Init>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+Thread created!	<RX-THRD>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+PRC_BUF thread started, pid: 29559	<Thr_PrcBuf_Proc>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	ERR-LOWRISK.
+Cannot set 	thread priority!	<Thr_PrcBuf_Proc>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+Radar signature: 	<B7XC>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+RDC connected!	<127.0.0.1>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+UDP packets receiving thread is running!	<RX-THRD>
+
+[Thu Nov 30 14:14:52 2023]
+TID:0<AC>	INFO-MESSAGE.
+SFFT: 512 / SCNT: 480 / AVRG: 60	<Set_PDS_Config>
+
+[Thu Nov 30 15:00:02 2023]
+TID:0<AC>	ERR-FATAL!
+Error of signature receiving!	<Main chunk>
+
+[Thu Nov 30 15:00:02 2023]
+TID:0<AC>	INFO-MESSAGE.
+Data receiving thread is exited!	<RX-THRD>
+
+[Thu Nov 30 15:00:02 2023]
+TID:0<AC>	INFO-MESSAGE.
+Socket class released!	<Global_Destr>
+
+[Thu Nov 30 15:00:02 2023]
+TID:0<AC>	INFO-MESSAGE.
+Thread class released!	<Global_Destr>
+
+[Thu Nov 30 15:00:02 2023]
+TID:0<AC>	INFO-MESSAGE.
+Thread stopped...	<Thr_PrcBuf_Proc>
+
+[Thu Nov 30 15:00:02 2023]
+TID:0<AC>	INFO-MESSAGE.
+Processing module released.	<Global_Destr>
+
+[Thu Nov 30 15:00:02 2023]
+TID:0<AC>	INFO-MESSAGE.
+Program exited with status:...	<SUCCESS>
+

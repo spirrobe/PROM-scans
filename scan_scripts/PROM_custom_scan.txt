@@ -1,0 +1,210 @@
+#!/home/data/metek/m36s/bin/aerotechcmd
+# 
+# 
+#20191206: switched to elv_ppi=85; 
+
+aero WAIT MODE NOWAIT
+
+#sh kill_rx_client  # stop pdm file recording, though normally it should be stopped already
+#sh kill_processing
+
+pl $my{elv_hi} = 90.0
+pl $my{elv_med1} = 110   
+pl $my{elv_med2} = 130 
+pl $my{elv_lo} = 150
+pl $my{azi_start} = 45
+pl $my{elv_start} = 30
+pl $my{elvspeed} = 0.5
+pl $my{elvreturnspeed} = 5
+
+pl $my{elv_ppi} = 85
+pl $my{azispeed} = 4
+
+pl $my{elv_zenith} = 90.0
+
+sh crcmd view_control=2 /home/data/metek/m36s/srv_scripts/set_sft 256
+
+###
+###initially, do 30 seconds of zenith observations for calibration
+###
+aero moveabs y `$my{elv_hi}` yf `$my{elvreturnspeed}`
+aero moveabs x `$my{azi_start}` xf `$my{elvreturnspeed}`
+aero wait MOVEDONE y
+aero wait MOVEDONE x
+sh get_rx_client  nave=20 scantype=.zen   # start pdm file recording
+pl $my{pdmfilename_trunk} = $val[0]
+pl chomp $my{pdmfilename_trunk}
+pl select(undef, undef, undef, 30.0)
+sh kill_rx_client  # stop pdm file recording
+pl select(undef, undef, undef, 0.5)
+sh scan_processing_bg /data/`$my{pdmfilename_trunk}`.pdm /mom/latest/`$my{pdmfilename_trunk}`
+pl print "Doing /mom/latest/",$my{pdmfilename_trunk}, "\n"
+
+###
+###move quickly to remove the water on antennas and move to 30°
+###
+aero moveabs y `$my{elv_start}` yf `$my{elvreturnspeed}` 
+aero moveabs x `$my{azi_start}` xf `$my{elvreturnspeed}`
+aero wait MOVEDONE x
+aero wait MOVEDONE y
+
+
+###
+###first branch --> rhi scan: 30 to 90° elevation
+###
+###################
+#total sleep: 12.5 s
+#total move time: 120 s
+#total time: 132 s --> 2 min, 12.5 s
+###################
+sh get_rx_client  nave=20 scantype=.rhi   # start pdm file recording
+pl $my{pdmfilename_trunk} = $val[0]
+pl chomp $my{pdmfilename_trunk}
+pl select(undef, undef, undef, 2.0)
+#sh get_processing executed_by_cron=1
+
+aero moveabs y `$my{elv_hi}` yf `$my{elvspeed}`
+aero wait MOVEDONE y
+pl select(undef, undef, undef, 5.0)
+sh kill_rx_client  # stop pdm file recording
+pl select(undef, undef, undef, 0.5)
+
+# now launch the processing to background
+#sh scan_processing_bg /data/`$my{rhifile}`.pds /mom/latest/20`$my{rhifile}`
+#pl print "finished scan and sent processing of /data/$my{rhifile}.pds to background\n"
+sh scan_processing_bg /data/`$my{pdmfilename_trunk}`.pdm /mom/latest/`$my{pdmfilename_trunk}`
+pl print "Doing /mom/latest/",$my{pdmfilename_trunk}, "\n"
+
+###
+###second branch of RHI --> rhi scan: 90 to 150° elevation
+###
+###################
+#total sleep: 12.5 s
+#total move time: 120 s
+#total time: 132 s --> 2 min, 12.5 s
+###################
+sh get_rx_client  nave=20 scantype=.rhi   # start pdm file recording
+pl $my{pdmfilename_trunk} = $val[0]
+pl chomp $my{pdmfilename_trunk}
+pl select(undef, undef, undef, 5.0)
+#sh get_processing executed_by_cron=1
+
+aero moveabs y `$my{elv_lo}` yf `$my{elvspeed}`
+aero wait MOVEDONE y
+pl select(undef, undef, undef, 2.0)
+sh kill_rx_client  # stop pdm file recording
+pl select(undef, undef, undef, 0.5)
+
+# now launch the processing to background
+#sh scan_processing_bg /data/`$my{rhifile}`.pds /mom/latest/20`$my{rhifile}`
+#pl print "finished scan and sent processing of /data/$my{rhifile}.pds to background\n"
+sh scan_processing_bg /data/`$my{pdmfilename_trunk}`.pdm /mom/latest/`$my{pdmfilename_trunk}`
+pl print "Doing /mom/latest/",$my{pdmfilename_trunk}, "\n"
+
+
+###
+###begin with stop-scans
+###
+###second branch --> rhi scan: 90 - 110 - 130 - 150° elevation
+###
+###################
+#total sleep: 45.5 s
+#total move time: 40 + 40 + 40 s
+#total time: 132 s --> 2 min, 45.5 s
+###################
+sh get_rx_client nave=100 scantype=.rhistep                              # start pdm file recording
+##sh get_processing executed_by_cron=1                    # start pdm file processing (create dmp, zspc, mmclx files)
+#pl $my{pdmfilename_trunk} = $val[0]
+#pl chomp $my{pdmfilename_trunk}
+#pl select(undef, undef, undef, 15.0)              # sleep for 15 seconds
+#
+#
+#aero moveabs y `$my{elv_med2}` yf `$my{elvreturnspeed}` # Start scan 1
+#aero wait MOVEDONE y                              # Wait until scan is done
+#pl select(undef, undef, undef, 15.0)              # Sleep for 15 seconds
+#
+#aero moveabs y `$my{elv_med1}` yf `$my{elvreturnspeed}` # Start scan 2
+#aero wait MOVEDONE y                              # Wait until scan is done
+#pl select(undef, undef, undef, 15.0)              # Sleep for 15 seconds
+#
+#aero moveabs y `$my{elv_hi}` yf `$my{elvreturnspeed}`   # Start scan 3
+#aero wait MOVEDONE y                              # Wait until scan is done
+#pl select(undef, undef, undef, 15.0)              # Sleep for 15 seconds
+#
+#sh kill_rx_client                                 # stop pdm file recording   
+#pl select(undef, undef, undef, 1.0)               # Sleep for 0.5 seconds
+#
+#
+## now launch the processing to background
+##sh scan_processing_bg /data/`$my{rhifile}`.pds /mom/latest/20`$my{rhifile}`
+##pl print "finished scan and sent processing of /data/$my{rhifile}.pds to background\n"
+#sh scan_processing_bg /data/`$my{pdmfilename_trunk}`.pdm /mom/latest/`$my{pdmfilename_trunk}`
+#pl print "Doing /mom/latest/",$my{pdmfilename_trunk}, "\n"
+
+
+
+#third branch: ppi scan (ppi birdbath) from 0 to 360° azimuth at 90° elevation
+###################
+#total sleep: 12.5 s
+#total move time: 20 s + 90 s = 110 s
+#total time: 122.5 s --> 2 min, 12.5s
+###################
+aero moveabs y `$my{elv_hi}` yf `$my{elvreturnspeed}` #move quickly to elevation of ppi scan
+aero wait MOVEDONE y                                   #wait until scan is done
+sh get_rx_client nave=20 scantype=.ppibb                              # start pdm file recording
+pl $my{pdmfilename_trunk} = $val[0]
+pl chomp $my{pdmfilename_trunk}
+pl select(undef, undef, undef, 1.0)
+#sh get_processing executed_by_cron=1
+aero moveinc x 360 xf `$my{azispeed}`
+aero wait MOVEDONE x
+pl select(undef, undef, undef, 1.0)
+sh kill_rx_client                                     # stop pdm file recording
+pl select(undef, undef, undef, 0.5)
+
+# now launch the processing to background
+#sh scan_processing_bg /data/`$my{rhifile}`.pds /mom/latest/20`$my{rhifile}`
+#pl print "finished scan and sent processing of /data/$my{rhifile}.pds to background\n"
+sh scan_processing_bg /data/`$my{pdmfilename_trunk}`.pdm /mom/latest/`$my{pdmfilename_trunk}`
+pl print "Doing /mom/latest/",$my{pdmfilename_trunk}, "\n"
+
+
+#third branch: ppi scan (ppi) from 0 to 360° azimuth at 85° elevation
+###################
+#total sleep: 12.5 s
+#total move time: 20 s + 90 s = 110 s
+#total time: 122.5 s --> 2 min, 12.5s
+###################
+aero moveabs y `$my{elv_ppi}` yf `$my{elvreturnspeed}` #move quickly to elevation of ppi scan
+aero wait MOVEDONE y                                   #wait until scan is done
+sh get_rx_client  nave=20 scantype=.ppi                                   # start pdm file recording
+pl $my{pdmfilename_trunk} = $val[0]
+pl chomp $my{pdmfilename_trunk}
+
+pl select(undef, undef, undef, 1.0)
+sh get_processing executed_by_cron=1
+aero moveinc x 360 xf `$my{azispeed}`
+aero wait MOVEDONE x
+pl select(undef, undef, undef, 1.0)
+sh kill_rx_client                                     # stop pdm file recording
+pl select(undef, undef, undef, 0.5)
+
+# now launch the processing to background
+#sh scan_processing_bg /data/`$my{rhifile}`.pds /mom/latest/20`$my{rhifile}`
+#pl print "finished scan and sent processing of /data/$my{rhifile}.pds to background\n"
+sh scan_processing_bg /data/`$my{pdmfilename_trunk}`.pdm /mom/latest/`$my{pdmfilename_trunk}`
+pl print "Doing /mom/latest/",$my{pdmfilename_trunk}, "\n"
+
+
+#back to zenith-pointing
+###################
+#total sleep: 0.5 s
+#total move time: 20 s
+#total time: 20.5 s
+###################
+aero moveabs y `$my{elv_zenith}` yf `$my{elvreturnspeed}`
+aero wait MOVEDONE y
+pl select(undef, undef, undef, 0.5)
+
+sh crcmd view_control=2 /home/data/metek/m36s/srv_scripts/set_sft 512
+
