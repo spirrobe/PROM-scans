@@ -2,7 +2,7 @@
 localdir=/data/userdata/spirig/prom
 device="mbr5"
 remotedir=/data
-bwlimit=5000
+bwlimit=3000
 
 SYNCFILE=~/.rsyncpdmmbr5
 scantypes=('rhi' 'zen' 'ppibb' 'ppi')
