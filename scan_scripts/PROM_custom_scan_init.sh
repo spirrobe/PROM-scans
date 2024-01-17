@@ -46,3 +46,4 @@ if (  "`check_aerotech|tail -1`" == "OK" ) then
         echo finished scan-script at `date`
         rm ~/.scanning
         get_processing executed_by_cron=1
+endif
